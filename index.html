@@ -28,6 +28,7 @@
   <button data-page="verification"><span class="ico">◉</span> Candidate Verification</button>
   <button data-page="security"><span class="ico">▣</span> Question Paper Security</button>
   <button data-page="exam"><span class="ico">▤</span> Exam Management</button>
+  <button data-page="study"><span class="ico">📚</span> Study Zone</button>
   <button data-page="answer"><span class="ico">☑</span> Answer Key & Evaluation</button>
   <button data-page="results"><span class="ico">🏆</span> Result Declaration</button>
   <button data-page="analytics"><span class="ico">▥</span> Analytics & Reports</button>
@@ -40,7 +41,7 @@
  </nav>
  <div class="nav-label">SYSTEM</div>
  <nav class="nav"><button data-page="settings"><span class="ico">⚙</span> Settings</button></nav>
- <div class="side-bottom">Secure • Transparent • Accountable<br>Demo interface · Version 1.0</div>
+ <div class="side-bottom">Secure • Transparent • Accountable<br>Demo interface · Study Zone Edition</div>
 </aside>
 <main class="main">
  <header class="topbar"><div class="crumb"><button class="mobile-menu" id="menuBtn">☰</button><b id="crumb">Dashboard</b> <span> / Pariksha Mitra</span></div><div class="top-actions"><span class="pill">● SYSTEM ONLINE</span><span style="font-size:12px;color:#64748b">Admin User</span><div class="avatar">AD</div></div></header>
@@ -54,6 +55,7 @@ dashboard:{title:"Dashboard",sub:"परीक्षा व्यवस्था
 verification:{title:"Candidate Verification",sub:"Biometric आणि Face Recognition द्वारे उमेदवार पडताळणी",render:verification},
 security:{title:"Question Paper Security",sub:"Question Paper Vault आणि Chain of Custody",render:security},
 exam:{title:"Exam Management",sub:"परीक्षा नियोजन, वेळापत्रक आणि Centre Allocation",render:exam},
+study:{title:"Study Zone",sub:"सर्व स्पर्धा परीक्षांसाठी अभ्यास साहित्य, सराव आणि ऑनलाइन शिक्षण",render:studyZone},
 answer:{title:"Answer Key & Evaluation",sub:"Answer key objections, evaluation आणि moderation",render:answer},
 results:{title:"Result Declaration",sub:"निकाल, Scorecard आणि Merit List व्यवस्थापन",render:results},
 analytics:{title:"Analytics & Reports",sub:"परीक्षा संबंधित अहवाल आणि कामगिरी विश्लेषण",render:analytics},
@@ -92,6 +94,34 @@ const officialExamLinks=[
 ["India Government Jobs","केंद्र व राज्य शासनाच्या अधिकृत विभागांच्या सूचना","Central","🌐","https://www.india.gov.in/" ]
 ];
 function filterOfficialExams(){const q=(document.getElementById('officialExamSearch')?.value||'').toLowerCase();const cat=document.getElementById('officialExamCategory')?.value||'all';document.querySelectorAll('.official-exam-card').forEach(card=>{const matchText=card.dataset.search.includes(q);const matchCat=cat==='all'||card.dataset.category===cat;card.style.display=matchText&&matchCat?'':'none';});}
+
+const studyLinks=[
+ {name:"NCERT",desc:"इयत्ता 1 ते 12 ची पाठ्यपुस्तके, PDF आणि शैक्षणिक साहित्य",category:"Books & Notes",access:"Free",icon:"📘",url:"https://ncert.nic.in/"},
+ {name:"ePathshala",desc:"NCERT पुस्तके आणि डिजिटल शैक्षणिक साहित्य",category:"Books & Notes",access:"Free",icon:"📚",url:"https://epathshala.nic.in/"},
+ {name:"DIKSHA",desc:"शालेय अभ्यासक्रम, व्हिडिओ आणि डिजिटल धडे",category:"Books & Notes",access:"Free",icon:"🎒",url:"https://diksha.gov.in/"},
+ {name:"SWAYAM",desc:"विविध विषयांचे ऑनलाइन कोर्स आणि शिकण्याचे साहित्य",category:"Video & Courses",access:"Free courses",icon:"🎓",url:"https://swayam.gov.in/"},
+ {name:"Khan Academy",desc:"गणित, विज्ञान, अर्थशास्त्र आणि मूलभूत संकल्पना",category:"Video & Courses",access:"Free",icon:"🧠",url:"https://www.khanacademy.org/"},
+ {name:"NTA Exam Portal",desc:"JEE, NEET, CUET आणि इतर प्रवेश परीक्षांची माहिती व सराव साहित्य",category:"Exam Preparation",access:"Free resources",icon:"🎯",url:"https://nta.ac.in/"},
+ {name:"MPSC Official",desc:"MPSC जाहिराती, अभ्यासक्रम, परीक्षा व उत्तरतालिका",category:"Exam Preparation",access:"Free",icon:"🏛️",url:"https://www.mpsc.gov.in/"},
+ {name:"UPSC Official",desc:"UPSC syllabus, previous question papers, notices आणि परीक्षा माहिती",category:"Previous Papers",access:"Free",icon:"🇮🇳",url:"https://upsc.gov.in/examinations/previous-question-papers"},
+ {name:"SSC Official",desc:"SSC परीक्षा, अभ्यासक्रम, notices आणि उपलब्ध प्रश्नपत्रिका",category:"Previous Papers",access:"Free",icon:"📝",url:"https://ssc.gov.in/"},
+ {name:"IBPS Official",desc:"बँकिंग परीक्षा, सूचना, अभ्यासक्रम आणि अधिकृत अपडेट्स",category:"Exam Preparation",access:"Free",icon:"🏦",url:"https://www.ibps.in/"},
+ {name:"Testbook",desc:"Mock tests, quizzes आणि विविध स्पर्धा परीक्षांचा सराव",category:"Mock Tests",access:"Free + Paid",icon:"🧪",url:"https://testbook.com/"},
+ {name:"Adda247",desc:"Banking, SSC, Railway, Teaching आणि इतर परीक्षांसाठी सराव",category:"Mock Tests",access:"Free + Paid",icon:"✍️",url:"https://www.adda247.com/"},
+ {name:"PIB – Press Information Bureau",desc:"सरकारी योजना, राष्ट्रीय घडामोडी आणि अधिकृत बातम्या",category:"Current Affairs",access:"Free",icon:"📰",url:"https://pib.gov.in/"},
+ {name:"Maharashtra Government",desc:"महाराष्ट्र शासनाचे निर्णय, योजना आणि अधिकृत अपडेट्स",category:"Current Affairs",access:"Free",icon:"🏢",url:"https://www.maharashtra.gov.in/"}
+];
+function studyZone(){
+ const cats=["All","Books & Notes","Video & Courses","Exam Preparation","Previous Papers","Mock Tests","Current Affairs"];
+ return head("📚 STUDY ZONE – All Exams Preparation","MPSC, UPSC, SSC, Banking, Railway, Police Bharti, JEE, NEET आणि इतर परीक्षांसाठी एकाच ठिकाणी अभ्यास लिंक.")+
+ `<div class="welcome-hero" style="min-height:145px"><div class="hero-copy"><div class="hero-kicker">LEARN • PRACTICE • IMPROVE</div><h2>तुमच्या यशाची तयारी इथून सुरू करा!</h2><p>अधिकृत अभ्यास साहित्य, मोफत पुस्तके, व्हिडिओ कोर्स, Mock Tests आणि Current Affairs एका ठिकाणी.</p></div><div class="hero-emblem">📚</div></div>
+ <div class="cards">${stat('Study Resources',studyLinks.length,'📚','अभ्यासासाठी निवडक लिंक')}${stat('Free Resources',studyLinks.filter(x=>x.access==='Free'||x.access==='Free courses'||x.access==='Free resources').length,'🆓','मोफत उपलब्ध')}${stat('Practice Platforms','02','📝','Free + Paid पर्याय')}${stat('Study Categories',cats.length-1,'🎯','विषयानुसार विभाग')}</div>
+ <div class="note">सूचना: या बाह्य वेबसाइट्सच्या लिंक आहेत. काही प्लॅटफॉर्मवर मोफत आणि सशुल्क दोन्ही साहित्य असू शकते. पैसे भरण्यापूर्वी त्यांच्या अधिकृत वेबसाइटवरील अटी तपासा. Pariksha Mitra या वेबसाइटचा त्या सेवांशी अधिकृत संबंध नाही.</div>
+ <div class="panel"><div class="panel-title"><h3>🔎 अभ्यास साहित्य शोधा</h3><span>Search & Filter</span></div><div class="toolbar"><input class="search" id="studySearch" placeholder="वेबसाइट / परीक्षा / विषय शोधा..." oninput="filterStudyLinks()"><select id="studyCategory" onchange="filterStudyLinks()">${cats.map(c=>`<option value="${c}">${c==='All'?'सर्व विभाग':c}</option>`).join('')}</select><select id="studyAccess" onchange="filterStudyLinks()"><option value="All">सर्व प्रकार</option><option value="Free">मोफत</option><option value="Paid">Paid / Free + Paid</option></select></div>
+ <div class="module-grid" id="studyGrid">${studyLinks.map(x=>`<div class="module-card study-card" data-category="${x.category}" data-access="${x.access}" data-search="${(x.name+' '+x.desc+' '+x.category).toLowerCase()}"><div class="bigico">${x.icon}</div><div style="display:flex;justify-content:space-between;gap:8px;align-items:center"><h3>${x.name}</h3><span class="badge ${x.access==='Free'?'b-green':'b-yellow'}">${x.access}</span></div><p>${x.desc}</p><a href="${x.url}" target="_blank" rel="noopener noreferrer">वेबसाइट उघडा ↗</a></div>`).join('')}</div><div id="studyEmpty" class="empty hidden">या शोधासाठी लिंक सापडली नाही.</div></div>
+ <div class="panel"><div class="panel-title"><h3>💡 अभ्यास कसा सुरू कराल?</h3></div><div class="module-grid"><div class="module-card"><div class="bigico">1️⃣</div><h3>परीक्षा निवडा</h3><p>तुमच्या लक्ष्य परीक्षेचा अधिकृत अभ्यासक्रम आणि पात्रता तपासा.</p></div><div class="module-card"><div class="bigico">2️⃣</div><h3>मूलभूत अभ्यास</h3><p>NCERT, ePathshala आणि DIKSHA मधून मूलभूत संकल्पना शिका.</p></div><div class="module-card"><div class="bigico">3️⃣</div><h3>सराव व पुनरावृत्ती</h3><p>मॉक टेस्ट द्या, चुका नोंदवा आणि नियमित पुनरावृत्ती करा.</p></div></div></div>`;
+}
+function filterStudyLinks(){const q=(document.getElementById('studySearch')?.value||'').toLowerCase();const cat=document.getElementById('studyCategory')?.value||'All';const access=document.getElementById('studyAccess')?.value||'All';let shown=0;document.querySelectorAll('.study-card').forEach(card=>{const ok=card.dataset.search.includes(q)&&(cat==='All'||card.dataset.category===cat)&&(access==='All'||(access==='Free'?card.dataset.access==='Free'||card.dataset.access==='Free courses'||card.dataset.access==='Free resources':card.dataset.access.includes('Paid')));card.style.display=ok?'':'none';if(ok)shown++;});document.getElementById('studyEmpty')?.classList.toggle('hidden',shown!==0);}
 
 const grievances=[["GRV-26001","PS260002","Centre allotment issue","Under Review","2026-11-10"],["GRV-26002","PS260004","Hall ticket correction","Resolved","2026-11-06"]];
 const noticeItems=[["महत्त्वाची सूचना","उमेदवारांनी Hall Ticket व वैध ओळखपत्र सोबत आणावे.","महत्त्वाचे","2026-11-05"],["MHT-CET परीक्षा अपडेट","परीक्षा वेळापत्रक अधिकृत घोषणेनंतर येथे उपलब्ध होईल.","परीक्षा","2026-11-04"],["तक्रार निवारण","तक्रार नोंदवल्यानंतर मिळालेला Ticket Number जतन करा.","माहिती","2026-11-03"]];
